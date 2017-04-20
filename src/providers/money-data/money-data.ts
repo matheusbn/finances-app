@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { Cashflow } from '../../model/Cashflow';
 
-/*
-  Generated class for the MoneyDataProvider provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 @Injectable()
 export class MoneyDataProvider {
+	totalMoney: number;
+	cashflows: Array<Cashflow>;
 
-  constructor(public http: Http) {
-    console.log('Hello MoneyDataProvider Provider');
-  }
+
+    constructor() {
+    }
+
+    getTotalMoney(): number {
+        return this.totalMoney;
+    }
+    addCashflow(cashflow: Cashflow) {
+        this.cashflows.push(cashflow);
+    }
+    getCashflows(): Array<Cashflow> {
+        return this.cashflows;
+    }
 
 }

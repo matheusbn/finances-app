@@ -1,0 +1,16 @@
+{
+	"pages": {
+		"statistics": {
+			"title": "Estatísticas"
+		},
+		"settings": {
+			"title": "Configurações",
+			"language": "Linguagem",
+			"options": {
+				"en": "Inglês",
+				"pt": "Português"
+			}
+
+		}
+	}
+}

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { IonicModule } from 'ionic-angular';
+import { IonicPageModule } from 'ionic-angular';
 import { StatisticsPage } from './statistics';
 
 @NgModule({
@@ -7,7 +7,7 @@ import { StatisticsPage } from './statistics';
     StatisticsPage,
   ],
   imports: [
-    IonicModule.forChild(StatisticsPage),
+    IonicPageModule.forChild(StatisticsPage),
   ],
   exports: [
     StatisticsPage
