@@ -9,21 +9,24 @@
 
 <ion-content padding>
     <form [formGroup]="form">
+		<p class="error-message" *ngIf="!form.controls.valid">Please fill out all fields accurately.</p>
         <ion-item>
             <ion-label>Date</ion-label>
-            <ion-input formControlName="date" type="date"></ion-input>
+			<ion-datetime displayFormat="DD/MM/YYYY"></ion-datetime>
         </ion-item>
-
 
         <ion-item>
             <ion-label>Amount</ion-label>
-            <ion-input formControlName="amount" type="tel"></ion-input>
+            <ion-input formControlName="amount" type="tel" text-right></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label>Type</ion-label>
-            <ion-input formControlName="type" type="text"></ion-input>
+            <ion-select formControlName="type" type="text">
+				<ion-option *ngFor="let type of cashflowTypes">{{type}}</ion-option>
+			</ion-select>
         </ion-item>
     </form>
+	<br>
     <button ion-button block (click)="add()">ADD</button>
 </ion-content>

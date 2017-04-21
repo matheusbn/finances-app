@@ -22,7 +22,6 @@ export class HomePage {
 
 
     addCashflow() {
-        console.log('aaa');
         let modal = this.modalCtrl.create('AddCashflowPage');
         modal.present();
     }

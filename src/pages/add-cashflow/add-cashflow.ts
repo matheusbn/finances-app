@@ -1,14 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CashflowType } from '../../model/CashflowType';
 
 
-/**
- * Generated class for the AddCashflowPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
 @IonicPage()
 @Component({
 	selector: 'page-add-cashflow',
@@ -16,18 +11,24 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class AddCashflowPage {
 	form: FormGroup;
+	cashflowTypes: Array<string>;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
+		this.cashflowTypes = this.getEnumNames(CashflowType);
 		this.form = formBuilder.group({
-			date: [''],
+			date: ['', Validators.required],
 			amount: [''],
 			type: ['']
 		});
-
 	}
 
 	add() {
 		console.log(this.form.value);
 	}
 
+	getEnumNames(e: any) {
+		let objValues = Object.keys(e).map(key => e[key]);
+		let names = objValues.filter(value => typeof value === "string") as string[];
+		return names;
+	}	
 }

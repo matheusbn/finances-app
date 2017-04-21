@@ -23,6 +23,7 @@ export function createTranslateLoader(http: Http) {
     HomePage,
     StatisticsPage,
     SettingsPage
+
   ],
   imports: [
     BrowserModule,

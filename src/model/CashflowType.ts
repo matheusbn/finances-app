@@ -1,3 +1,4 @@
 export enum CashflowType {
-    FOOD, OTHER
+    Food,
+	Other
 }
