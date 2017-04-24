@@ -29,11 +29,11 @@
 
     <ion-list>
 		<ion-item-divider></ion-item-divider>
-        <ion-card *ngFor="let cashflow of cashflows" class="cashflow-card">
+        <ion-card *ngFor="let cashflow of cashflows.slice().reverse()" class="cashflow-card">
 			<ion-card-content>
 				<div class="left">
-					<p>{{cashflow.date}}</p>
-					<p>{{unit}}resultingMoney</p>
+					<p>{{cashflow.date.toLocaleDateString(dateFormat)}}</p>
+					<p>{{unit + cashflow.resultingMoney}}</p>
 				</div>
 				<div class="right" text-right>
 					<p>{{unit + cashflow.amount}}</p>

@@ -12,7 +12,7 @@
 		<p class="error-message" text-center *ngIf="!form.valid && submitFailed">Please fill out all fields accurately.</p>
         <ion-item>
             <ion-label>Date</ion-label>
-			<ion-datetime formControlName="date" displayFormat="DD/MM/YYYY"></ion-datetime>
+			<ion-datetime formControlName="date" [(ngModel)]="currentDate" displayFormat="DD/MM/YYYY"></ion-datetime>
         </ion-item>
 
         <ion-item>
