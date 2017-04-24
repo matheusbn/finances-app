@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CashflowType } from '../../model/CashflowType';
 
@@ -12,18 +12,25 @@ import { CashflowType } from '../../model/CashflowType';
 export class AddCashflowPage {
 	form: FormGroup;
 	cashflowTypes: Array<string>;
+	submitFailed: boolean;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public formBuilder: FormBuilder) {
 		this.cashflowTypes = this.getEnumNames(CashflowType);
 		this.form = formBuilder.group({
 			date: ['', Validators.required],
-			amount: [''],
-			type: ['']
+			amount: ['', Validators.compose([Validators.pattern('[0-9]*'), Validators.required])],
+			type: ['', Validators.required]
 		});
 	}
 
 	add() {
-		console.log(this.form.value);
+		if (this.form.valid) {
+			this.viewCtrl.dismiss(this.form.value);
+
+		}
+		else {
+			this.submitFailed = true;
+		}
 	}
 
 	getEnumNames(e: any) {

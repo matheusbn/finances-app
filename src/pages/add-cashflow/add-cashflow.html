@@ -9,16 +9,19 @@
 
 <ion-content padding>
     <form [formGroup]="form">
-		<p class="error-message" *ngIf="!form.controls.valid">Please fill out all fields accurately.</p>
+		<p class="error-message" text-center *ngIf="!form.valid && submitFailed">Please fill out all fields accurately.</p>
         <ion-item>
             <ion-label>Date</ion-label>
-			<ion-datetime displayFormat="DD/MM/YYYY"></ion-datetime>
+			<ion-datetime formControlName="date" displayFormat="DD/MM/YYYY"></ion-datetime>
         </ion-item>
 
         <ion-item>
             <ion-label>Amount</ion-label>
             <ion-input formControlName="amount" type="tel" text-right></ion-input>
         </ion-item>
+		<p class="error-message" text-right *ngIf="!form.controls.amount.valid && (form.controls.amount.dirty || submitFailed)">
+			Please enter a valid number.
+		</p>
 
         <ion-item>
             <ion-label>Type</ion-label>

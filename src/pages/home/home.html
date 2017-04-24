@@ -13,7 +13,7 @@
     <ion-item no-lines>
 
 	<label item-left>
-        R$ {{totalMoney}}
+        {{unit + totalMoney}}
     </label>
 
     <div item-right>
@@ -26,9 +26,20 @@
         </button>
     </div>
     </ion-item>
-    <hr>
 
     <ion-list>
-        <ion-item></ion-item>
+		<ion-item-divider></ion-item-divider>
+        <ion-card *ngFor="let cashflow of cashflows" class="cashflow-card">
+			<ion-card-content>
+				<div class="left">
+					<p>{{cashflow.date}}</p>
+					<p>{{unit}}resultingMoney</p>
+				</div>
+				<div class="right" text-right>
+					<p>{{unit + cashflow.amount}}</p>
+					<p>{{cashflow.type}}</p>
+				</div>
+			</ion-card-content>
+		</ion-card>
     </ion-list>
 </ion-content>
