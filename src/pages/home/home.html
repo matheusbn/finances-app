@@ -16,13 +16,13 @@
         {{unit + totalMoney}}
     </label>
 
-    <div item-right>
-        <button (click)="addCashflow()" ion-button small>
-            <ion-icon name="add"></ion-icon>
+    <div item-right id="cashflow-buttons">
+        <button (click)="addCashflow(true)" ion-button small id="income-button">
+            <ion-icon name="add" class="big-icon"></ion-icon>
         </button>
         <br>
-        <button ion-button small>
-            <ion-icon name="remove"></ion-icon>
+        <button (click)="addCashflow(false)" ion-button small>
+            <ion-icon name="remove" class="big-icon"></ion-icon>
         </button>
     </div>
     </ion-item>

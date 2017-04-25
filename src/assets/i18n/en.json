@@ -3,6 +3,15 @@
 		"statistics": {
 			"title": "Statistics"
 		},
+		"add-cashflow": {
+			"income": {
+				"title": "Add Income"
+			},
+			"expense": {
+				"title": "Add Expense"
+			}
+
+		},
 		"settings": {
 			"title": "Settings",
 			"language": "Language",

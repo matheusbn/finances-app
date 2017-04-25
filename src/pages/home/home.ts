@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, IonicPage } from 'ionic-angular';
 
 import { Cashflow } from '../../model/cashflow';
-import { CashflowType } from '../../model/cashflow-type';
 
 import { MoneyDataProvider } from '../../providers/money-data/money-data';
 
@@ -28,15 +27,16 @@ export class HomePage {
 
 		// this.cashflows[0] = {
 		// 	date: "12/07/1995",
-		// 	amount: 22,
-		// 	type: CashflowType[1],
+		// 	amount: -22,
+		// 	type: "Food",
 		// 	resultingMoney: 22
 		// };
 	}
 
-
-    addCashflow() {
-        let modal = this.modalCtrl.create('AddCashflowPage');
+	
+	// The parameter cashflowType is used to determine wheter to add an income (true) or an expense (false).
+    addCashflow(cashflowType: boolean) {
+        let modal = this.modalCtrl.create('AddCashflowPage', {cashflowType: cashflowType});
 		modal.onDidDismiss(data => {
 			if(data) {
 				data.resultingMoney = this.totalMoney + data.amount;

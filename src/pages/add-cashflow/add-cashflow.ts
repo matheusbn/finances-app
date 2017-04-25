@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CashflowType } from '../../model/cashflow-type';
+import { ExpenseSources } from '../../model/expense-sources';
+import { IncomeSources } from '../../model/income-sources';
 
 
 @IonicPage()
@@ -11,13 +12,14 @@ import { CashflowType } from '../../model/cashflow-type';
 })
 export class AddCashflowPage {
 	form: FormGroup;
-	cashflowTypes: Array<string>;
+	cashflowSources: Array<string>;
 	submitFailed: boolean;
-
+	cashflowType: boolean;
 	currentDate: string;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public formBuilder: FormBuilder) {
-		this.cashflowTypes = this.getEnumNames(CashflowType);
+		this.cashflowType = this.navParams.get('cashflowType');
+		this.cashflowSources = this.getEnumNames(this.cashflowType ? IncomeSources : ExpenseSources);
 		this.form = formBuilder.group({
 			date: ['', Validators.required],
 			amount: ['', Validators.compose([Validators.pattern('[0-9]*'), Validators.required])],
@@ -29,7 +31,7 @@ export class AddCashflowPage {
 
 	add() {
 		if (this.form.valid) {
-			this.form.value.amount = Number(this.form.value.amount);
+			this.form.value.amount = Number( (this.cashflowType ? "" : "-") + this.form.value.amount);
 			this.form.value.date = new Date(this.form.value.date);
 			this.viewCtrl.dismiss(this.form.value);
 

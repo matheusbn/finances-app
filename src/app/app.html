@@ -3,7 +3,7 @@
 		<ion-list>
 			<ion-list-header>Menu</ion-list-header>
 			<button menuClose ion-item *ngFor="let menuSection of menuSections" (click)="navTo(menuSection.component)">
-			{{menuSection.title | translate}}
+				{{menuSection.title | translate}}
 			</button>
 		</ion-list>
 	</ion-content>
