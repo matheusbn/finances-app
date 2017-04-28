@@ -10,13 +10,11 @@ import { TranslateService } from 'ng2-translate';
 export class MyApp {
 	@ViewChild('myNav') nav: NavController
     rootPage: any = 'HomePage';
-	menuSections:Array<{title:string, component:any}>;
+	menuSections: Array<{title:string, component:any}>;
 
     constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,
 		translateService: TranslateService) {
         platform.ready().then(() => {
-            // Okay, so the platform is ready and our plugins are available.
-            // Here you can do any higher level native things you might need.
             statusBar.styleDefault();
             splashScreen.hide();
 

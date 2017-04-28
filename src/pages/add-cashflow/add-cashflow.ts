@@ -12,7 +12,7 @@ import { IncomeSources } from '../../model/income-sources';
 })
 export class AddCashflowPage {
 	form: FormGroup;
-	cashflowSources: Array<string>;
+	cashflowSources: string[];
 	submitFailed: boolean;
 	cashflowType: boolean;
 	currentDate: string;

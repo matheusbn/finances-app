@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Platform } from 'ionic-angular';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 import { Cashflow } from '../../model/cashflow';
@@ -9,7 +8,7 @@ export class DatabaseProvider {
 
 	database: SQLiteObject;
 
-	constructor(platform: Platform, private sqlite: SQLite) {
+	constructor(private sqlite: SQLite) {
 	}
 
 	initialize(): Promise<any> {
@@ -65,9 +64,7 @@ export class DatabaseProvider {
 
 
 
-
 	getDataFrom(table: String): Promise<any> {
-		// this.database.executeSql('DROP TABLE cashflows;', {});
 		return new Promise((resolve, reject) => {
 			this.database.executeSql(`SELECT * FROM ${table}`, {})
 			.then(data => {
@@ -82,5 +79,9 @@ export class DatabaseProvider {
 			})
 			.catch(error => reject(error));
 		});
+	}
+
+	dropTableCashflows() {
+		this.database.executeSql('DROP TABLE cashflows;', {});
 	}
 }
