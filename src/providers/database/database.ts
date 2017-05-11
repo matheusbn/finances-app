@@ -12,23 +12,20 @@ export class DatabaseProvider {
 	}
 
 	initialize(): Promise<any> {
-		return new Promise((resolve, reject) => {
-			this.sqlite.create({
-				name: 'data.db',
-				location: 'default'
-			})
-				.then( (db: SQLiteObject) => {
-					this.database = db;
-					this.database.executeSql(`CREATE TABLE IF NOT EXISTS cashflows(
+		return this.sqlite.create({
+			name: 'data.db',
+			location: 'default'
+		})
+			.then((db: SQLiteObject) => {
+				this.database = db;
+				return this.database.executeSql(`CREATE TABLE IF NOT EXISTS cashflows(
 						date INT,
 						amount INT,
 						type TEXT,
 						resultingMoney INT);`, {})
-						.then(data => resolve(data))
-						.catch(error => reject(error))
-				})
-				.catch(error => reject(error));
-		});
+					.catch(error => console.error(error));
+			})
+			.catch(error => console.error(error));
 	}
 
 	insertCashflow(cashflow: Cashflow): Promise<any> {
@@ -38,50 +35,43 @@ export class DatabaseProvider {
 			cashflow.type,
 			cashflow.resultingMoney
 		];
-		return new Promise((resolve, reject) => {
-			this.database.executeSql(`INSERT INTO cashflows (date, amount, type, resultingMoney) 
-				VALUES (?, ?, ?, ?)`, values)
-				.then(data => resolve(data))
-				.catch(error => reject(error));
-		});
+		return this.database.executeSql(`INSERT INTO cashflows (date, amount, type, resultingMoney) 
+			VALUES (?, ?, ?, ?)`, values)
+			.catch(error => console.error(error));
 	}
 
-	getCashflows(): Promise<any> {
-		return new Promise((resolve, reject) => {
-			this.database.executeSql(`SELECT * FROM cashflows`, {})
+	getCashflows(): Promise<Cashflow[]> {
+		return this.database.executeSql(`SELECT * FROM cashflows`, {})
 			.then(data => {
 				let cashflows = [];
 				let item = data.rows.item;
-				for(let i = 0; i < data.rows.length; i++) {
+				for (let i = 0; i < data.rows.length; i++) {
 					item(i).date = new Date(item(i).date);
 					cashflows.push(item(i));
 				}
-				resolve(cashflows);
+				return cashflows;
 			})
-			.catch(error => reject(error));
-		});
+			.catch(error => console.error(error));
 	}
 
 
 
 	getDataFrom(table: String): Promise<any> {
-		return new Promise((resolve, reject) => {
-			this.database.executeSql(`SELECT * FROM ${table}`, {})
+		return this.database.executeSql(`SELECT * FROM ${table}`, {})
 			.then(data => {
 				let items = [];
 				let item = data.rows.item;
-				for(let i = 0; i < data.rows.length; i++) {
+				for (let i = 0; i < data.rows.length; i++) {
 					items.push(item(i));
 				}
 				console.log(data.rows.length);
 				console.log(items);
-				resolve(items);
+				return items;
 			})
-			.catch(error => reject(error));
-		});
+			.catch(error => console.error(error));
 	}
 
 	dropTableCashflows() {
-		this.database.executeSql('DROP TABLE cashflows;', {});
+		return this.database.executeSql('DROP TABLE cashflows;', {});
 	}
 }

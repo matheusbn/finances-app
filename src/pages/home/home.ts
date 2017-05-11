@@ -26,13 +26,15 @@ export class HomePage {
 			this.unit = this.moneyData.unit;
 			this.dateFormat = 'pt-BR';
 
+			database.initialize().then(() => {
+				this.moneyData.loadCashflows()
+					.then(() => {
+						this.cashflows = this.moneyData.cashflows;
+						this.totalMoney = this.moneyData.totalMoney;
+					});
+			});
+
 			this.cashflows = [];
-			this.moneyData.loadCashflows()
-				.then(() => {
-					this.cashflows = this.moneyData.cashflows;
-					this.totalMoney = this.moneyData.totalMoney;
-				})
-				.catch(error => console.log(error));
 		}
 	}
 

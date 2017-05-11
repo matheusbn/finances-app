@@ -18,19 +18,11 @@ export class MoneyDataProvider {
 		this._totalMoney = Number(totalMoney);
 	}
 
-	loadCashflows(): Promise<any> {
-		return new Promise((resolve, reject) => {
-			this.database.initialize()
-				.then(() => {
-					this.database.getCashflows()
-						.then(cashflows => {
-							this.cashflows = cashflows;
-							resolve();
-						})
-						.catch(error => reject(error));
-				})
-				.catch(error => reject(error));
-		});
+	loadCashflows() {
+		return this.database.getCashflows()
+			.then(cashflows => {
+				this.cashflows = cashflows;
+			});
 	}
 
 	addCashflow(cashflow: Cashflow) {
