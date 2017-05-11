@@ -4,18 +4,18 @@ import { DatabaseProvider } from '../../providers/database/database';
 
 @Injectable()
 export class MoneyDataProvider {
-	totalMoney: number;
-	cashflows: Cashflow[];
-	unit: string;
+	private _totalMoney: number = 0;
+	private _cashflows: Cashflow[] = [];
+	unit: string = "R$ ";
 
-	constructor(private database: DatabaseProvider) {
-		this.cashflows = [];
-		this.totalMoney = 0;
-		this.unit = "R$ ";
+	constructor(private database: DatabaseProvider) {}
+
+	get totalMoney(): number {
+		return this._totalMoney;
 	}
 
-	getTotalMoney(): number {
-		return this.totalMoney;
+	set totalMoney(totalMoney: number) {
+		this._totalMoney = Number(totalMoney);
 	}
 
 	loadCashflows(): Promise<any> {
@@ -24,7 +24,7 @@ export class MoneyDataProvider {
 				.then(() => {
 					this.database.getCashflows()
 						.then(cashflows => {
-							this.setCashflows(cashflows);
+							this.cashflows = cashflows;
 							resolve();
 						})
 						.catch(error => reject(error));
@@ -32,28 +32,22 @@ export class MoneyDataProvider {
 				.catch(error => reject(error));
 		});
 	}
+
 	addCashflow(cashflow: Cashflow) {
 		this.cashflows.push(cashflow);
 		this.database.insertCashflow(cashflow);
-		this.totalMoney += Number(cashflow.amount);
+		this.totalMoney += cashflow.amount;
 	}
-	setCashflows(cashflows: Cashflow[]) {
-		this.cashflows = cashflows;
+	
+	set cashflows(cashflows: Cashflow[]) {
+		this._cashflows = cashflows;
 		this.totalMoney = 0;
-		this.cashflows.forEach(cashflow => {
+		this._cashflows.forEach(cashflow => {
 			this.totalMoney += cashflow.amount;
 		})
 	}
-	getCashflows(): Cashflow[] {
-		let dinheiros: Array<Cashflow>;
-		dinheiros = this.cashflows;
-		return dinheiros;
-	}
 
-	getUnit(): string {
-		return this.unit;
-	}
-	setUnit(unit: string) {
-		this.unit = unit;
+	get cashflows(): Cashflow[] {
+		return this._cashflows;
 	}
 }

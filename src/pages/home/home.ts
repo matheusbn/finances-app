@@ -20,24 +20,17 @@ export class HomePage {
 
 	constructor(public navCtrl: NavController, public modalCtrl: ModalController,
 		public moneyData: MoneyDataProvider, public database: DatabaseProvider) {
-		console.log('home constructor');
-		// let newCashflow = {
-		// 	date: new Date('2014-07-12'),
-		// 	amount: 22,
-		// 	resultingMoney: 22,
-		// 	type: 'Salary'
-		// }
 
 		if (!this.cashflows) {
 			this.totalMoney = 0;
-			this.unit = this.moneyData.getUnit();
+			this.unit = this.moneyData.unit;
 			this.dateFormat = 'pt-BR';
 
 			this.cashflows = [];
 			this.moneyData.loadCashflows()
 				.then(() => {
-					this.cashflows = this.moneyData.getCashflows();
-					this.totalMoney = this.moneyData.getTotalMoney();
+					this.cashflows = this.moneyData.cashflows;
+					this.totalMoney = this.moneyData.totalMoney;
 				})
 				.catch(error => console.log(error));
 		}
