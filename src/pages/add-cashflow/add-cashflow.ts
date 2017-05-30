@@ -42,8 +42,8 @@ export class AddCashflowPage {
 	}
 
 	getEnumNames(e: any) {
-		let objValues = Object.keys(e).map(key => e[key]);
-		let names = objValues.filter(value => typeof value === "string") as string[];
+		const objValues = Object.keys(e).map(key => e[key]);
+		const names = objValues.filter(value => typeof value === "string") as string[];
 		return names;
 	}	
 }

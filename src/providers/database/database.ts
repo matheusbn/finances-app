@@ -28,7 +28,7 @@ export class DatabaseProvider {
 	}
 
 	insertCashflow(cashflow: Cashflow): Promise<any> {
-		let values = [
+		const values = [
 			cashflow.date.valueOf(),
 			cashflow.amount,
 			cashflow.type,
@@ -42,8 +42,8 @@ export class DatabaseProvider {
 	getCashflows(): Promise<Cashflow[]> {
 		return this.database.executeSql(`SELECT * FROM cashflows`, {})
 			.then(data => {
-				let cashflows = [];
-				let item = data.rows.item;
+				const cashflows = [];
+				const item = data.rows.item;
 				for (let i = 0; i < data.rows.length; i++) {
 					item(i).date = new Date(item(i).date);
 					cashflows.push(item(i));
@@ -58,8 +58,8 @@ export class DatabaseProvider {
 	selectTable(table: String): Promise<any> {
 		return this.database.executeSql(`SELECT * FROM ${table}`, {})
 			.then(data => {
-				let items = [];
-				let item = data.rows.item;
+				const items = [];
+				const item = data.rows.item;
 				for (let i = 0; i < data.rows.length; i++) {
 					items.push(item(i));
 				}

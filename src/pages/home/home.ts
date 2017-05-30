@@ -40,7 +40,7 @@ export class HomePage {
 
 	// The parameter cashflowType is used to determine wheter to add an income (true) or an expense (false).
 	addCashflow(cashflowType: boolean) {
-		let modal = this.modalCtrl.create('AddCashflowPage', { cashflowType: cashflowType });
+		const modal = this.modalCtrl.create('AddCashflowPage', { cashflowType: cashflowType });
 		modal.onDidDismiss(data => {
 			if (data) {
 				this.totalMoney += data.amount;
