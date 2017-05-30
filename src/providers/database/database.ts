@@ -8,8 +8,7 @@ export class DatabaseProvider {
 
 	database: SQLiteObject;
 
-	constructor(private sqlite: SQLite) {
-	}
+	constructor(private sqlite: SQLite) {}
 
 	initialize(): Promise<any> {
 		return this.sqlite.create({
@@ -18,14 +17,14 @@ export class DatabaseProvider {
 		})
 			.then((db: SQLiteObject) => {
 				this.database = db;
-				return this.database.executeSql(`CREATE TABLE IF NOT EXISTS cashflows(
+				return this.database.executeSql(`CREATE TABLE IF NOT EXISTS cashflows (
 						date INT,
 						amount INT,
 						type TEXT,
 						resultingMoney INT);`, {})
-					.catch(error => console.error(error));
+					.catch(console.error);
 			})
-			.catch(error => console.error(error));
+			.catch(console.error);
 	}
 
 	insertCashflow(cashflow: Cashflow): Promise<any> {
@@ -37,7 +36,7 @@ export class DatabaseProvider {
 		];
 		return this.database.executeSql(`INSERT INTO cashflows (date, amount, type, resultingMoney) 
 			VALUES (?, ?, ?, ?)`, values)
-			.catch(error => console.error(error));
+			.catch(console.error);
 	}
 
 	getCashflows(): Promise<Cashflow[]> {
@@ -51,12 +50,12 @@ export class DatabaseProvider {
 				}
 				return cashflows;
 			})
-			.catch(error => console.error(error));
+			.catch(console.error);
 	}
 
 
 
-	getDataFrom(table: String): Promise<any> {
+	selectTable(table: String): Promise<any> {
 		return this.database.executeSql(`SELECT * FROM ${table}`, {})
 			.then(data => {
 				let items = [];
@@ -68,7 +67,7 @@ export class DatabaseProvider {
 				console.log(items);
 				return items;
 			})
-			.catch(error => console.error(error));
+			.catch(console.error);
 	}
 
 	dropTableCashflows() {
