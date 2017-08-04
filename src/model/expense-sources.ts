@@ -1,4 +1,4 @@
 export enum ExpenseSources {
-    Food,
-	Other
+  Food,
+  Other
 }

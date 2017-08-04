@@ -10,7 +10,7 @@ import { TranslateService } from 'ng2-translate';
 })
 export class SettingsPage {
 
-	language: string;
+	language: string
 
 	constructor(public navCtrl: NavController, public navParams: NavParams,
 		public translateService: TranslateService) {
@@ -18,7 +18,7 @@ export class SettingsPage {
 
 
 	ionViewWillLeave() {
-		this.translateService.use(this.language);
+		this.translateService.use(this.language)
 	}
 
 }

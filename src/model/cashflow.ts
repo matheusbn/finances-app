@@ -1,7 +1,7 @@
-// import { CashflowType } from './cashflow-type';
+// import { CashflowType } from './cashflow-type'
 export class Cashflow {
-    date: Date;
-	amount: number;
-	type: string;
-	resultingMoney: number;
+  date: Date
+  amount: number
+  type: string
+  resultingMoney: number
 }

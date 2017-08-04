@@ -1,5 +1,5 @@
 {
   "name": "finances",
   "app_id": "",
-  "projectTypeId": "ionic-angular"
+  "type": "ionic-angular"
 }

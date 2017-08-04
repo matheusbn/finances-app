@@ -12,7 +12,7 @@ import { MoneyDataProvider } from '../providers/money-data/money-data';
 import { DatabaseProvider } from '../providers/database/database';
 
 export function createTranslateLoader(http: Http) {
-  return new TranslateStaticLoader(http, './assets/i18n', '.json');
+  return new TranslateStaticLoader(http, './assets/i18n', '.json')
 }
 
 @NgModule({

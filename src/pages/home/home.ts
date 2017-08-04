@@ -13,41 +13,41 @@ import { DatabaseProvider } from '../../providers/database/database';
 	templateUrl: 'home.html'
 })
 export class HomePage {
-	totalMoney: number;
-	cashflows: Cashflow[];
-	unit: string;
-	dateFormat: string;
+	totalMoney: number
+	cashflows: Cashflow[]
+	unit: string
+	dateFormat: string
 
 	constructor(public navCtrl: NavController, public modalCtrl: ModalController,
 		public moneyData: MoneyDataProvider, public database: DatabaseProvider) {
 
 		if (!this.cashflows) {
-			this.totalMoney = 0;
-			this.unit = this.moneyData.unit;
-			this.dateFormat = 'pt-BR';
+			this.totalMoney = 0
+			this.unit = this.moneyData.unit
+			this.dateFormat = 'pt-BR'
 
 			database.initialize().then(() => {
 				this.moneyData.loadCashflows()
 					.then(() => {
-						this.cashflows = this.moneyData.cashflows;
-						this.totalMoney = this.moneyData.totalMoney;
-					});
-			});
+						this.cashflows = this.moneyData.cashflows
+						this.totalMoney = this.moneyData.totalMoney
+					})
+			})
 
-			this.cashflows = [];
+			this.cashflows = []
 		}
 	}
 
 	// The parameter cashflowType is used to determine wheter to add an income (true) or an expense (false).
 	addCashflow(cashflowType: boolean) {
-		const modal = this.modalCtrl.create('AddCashflowPage', { cashflowType: cashflowType });
+		const modal = this.modalCtrl.create('AddCashflowPage', { cashflowType: cashflowType })
 		modal.onDidDismiss(data => {
 			if (data) {
-				this.totalMoney += data.amount;
-				data.resultingMoney = this.totalMoney;
-				this.moneyData.addCashflow(data);
+				this.totalMoney += data.amount
+				data.resultingMoney = this.totalMoney
+				this.moneyData.addCashflow(data)
 			}
 		})
-		modal.present();
+		modal.present()
 	}
 }
