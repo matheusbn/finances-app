@@ -1,45 +1,83 @@
 <ion-header>
 
-	<ion-navbar color="primary">
-		<button ion-button menuToggle>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
 			<ion-icon name='menu'></ion-icon>
 		</button>
-		<ion-title>Home</ion-title>
-	</ion-navbar>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+
+
+  <ion-item color="secondary" no-lines no-padding>
+
+    <ion-grid no-padding>
+      <ion-row  id="header-info" align-items-center class="shadow-bottom">
+        <ion-col col-2>
+
+          <label>{{unit}}</label><label class="font-lg">{{totalMoney}}</label>
+
+        </ion-col>
+
+        <ion-col col-8></ion-col>
+
+        <ion-col col-2>
+
+          <div class="right" id="cashflow-buttons">
+            <button (click)="addCashflow(true)" ion-button small id="income-button">
+              <ion-icon name="add" class="icon-md"></ion-icon>
+            </button>
+            <br>
+            <button (click)="addCashflow(false)" ion-button small>
+              <ion-icon name="remove" class="icon-md"></ion-icon>
+            </button>
+          </div>
+
+        </ion-col>
+      </ion-row>
+
+      <ion-row justify-content-end>
+        <ion-col col-10></ion-col>
+
+        <ion-col col-1>
+          <button class="right icon-md" ion-button clear (click)="filter()">
+            <ion-icon name="options"></ion-icon>
+          </button>
+        </ion-col>
+
+        <ion-col col-1>
+          <button class="right icon-md" ion-button clear (click)="clearFilters()">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+  </ion-item>
 
 </ion-header>
 
 <ion-content>
-	<ion-item no-lines>
 
-		<label item-left>
-        	{{unit + totalMoney}}
-    	</label>
-
-		<div item-right id="cashflow-buttons">
-			<button (click)="addCashflow(true)" ion-button small id="income-button">
-            	<ion-icon name="add" class="big-icon"></ion-icon>
-        	</button>
-			<br>
-			<button (click)="addCashflow(false)" ion-button small>
-            	<ion-icon name="remove" class="big-icon"></ion-icon>
-        	</button>
-		</div>
-	</ion-item>
-
-	<ion-list>
-		<ion-item-divider></ion-item-divider>
-		<ion-card *ngFor="let cashflow of cashflows.slice().reverse()" class="cashflow-card">
-			<ion-card-content>
-				<div class="left">
-					<p>{{cashflow.date.toLocaleDateString(dateFormat)}}</p>
-					<p>{{unit + cashflow.resultingMoney}}</p>
-				</div>
-				<div class="right" text-right>
-					<p>{{unit + cashflow.amount}}</p>
-					<p>{{cashflow.type}}</p>
-				</div>
-			</ion-card-content>
-		</ion-card>
-	</ion-list>
+  <ion-list id="cashflow-list">
+    <div *ngFor="let cashflow of cashflows; let i = index">  
+      <ion-item-divider text-center *ngIf="(this.cashflows[i-1] &&
+        cashflow.date.getMonth() !== this.cashflows[i-1].date.getMonth()) || i === 0">
+        {{months[cashflow.date.getMonth()]}}
+      </ion-item-divider> 
+      <ion-card class="cashflow-card">
+        <ion-card-content>
+          <div class="left">
+            <p>{{cashflow.date.toLocaleString(dateFormat, dateOptions)}}</p>
+            <p>{{unit + cashflow.resultingMoney}}</p> 
+          </div>
+          <div class="right" text-right>
+            <p>{{unit + cashflow.amount}}</p>
+            <p>{{cashflow.source}}</p>
+          </div>
+        </ion-card-content>
+      </ion-card> 
+    </div>
+    
+  </ion-list>
 </ion-content>

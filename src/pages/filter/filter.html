@@ -1,0 +1,84 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Filter</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item>
+    <ion-label>Filter by</ion-label>
+    <ion-select [(ngModel)]="filterBy">
+      <ion-option value=0>Value</ion-option>
+      <ion-option value=1>Month</ion-option>
+      <ion-option value=2>Date</ion-option>
+      <ion-option value=3>Source</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="label">Income</ion-label>
+    <ion-checkbox item-right [(ngModel)]="isIncome" (ionChange)="manageIncomeCheckbox()">
+    </ion-checkbox>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="label">Expense</ion-label>
+    <ion-checkbox item-right [(ngModel)]="isExpense" (ionChange)="manageExpenseCheckbox()"></ion-checkbox>
+  </ion-item>
+
+  <div class="divider"></div>
+
+  <div *ngIf="filterBy == 0">
+    <ion-item>
+      <ion-label>From</ion-label>
+      <ion-input type="number" [(ngModel)]="fromValue" text-right></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>To</ion-label>
+      <ion-input type="number" [(ngModel)]="toValue" text-right></ion-input>
+    </ion-item>
+  </div>
+
+  <ion-item *ngIf="filterBy == 1">
+    <ion-label>Month</ion-label>
+    <ion-select [(ngModel)]="month">
+      <ion-option value=0>January</ion-option>
+      <ion-option value=1>February</ion-option>
+      <ion-option value=2>March</ion-option>
+      <ion-option value=3>April</ion-option>
+      <ion-option value=4>May</ion-option>
+      <ion-option value=5>June</ion-option>
+      <ion-option value=6>July</ion-option>
+      <ion-option value=7>August</ion-option>
+      <ion-option value=8>September</ion-option>
+      <ion-option value=9>October</ion-option>
+      <ion-option value=10>November</ion-option>
+      <ion-option value=11>December</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <div *ngIf="filterBy == 2">
+    <ion-item>
+      <ion-label>From</ion-label>
+      <ion-datetime [(ngModel)]="fromDate" displayFormat="DD/MM/YYYY"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>To</ion-label>
+      <ion-datetime [(ngModel)]="toDate" displayFormat="DD/MM/YYYY"></ion-datetime>
+    </ion-item>
+  </div>
+
+  <ion-item *ngIf="filterBy == 3">
+    <ion-label>Source</ion-label>
+    <ion-select [(ngModel)]="source">
+      <ion-option *ngFor="let source of cashflowSources">{{source}}</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <br>
+  <br>
+  <button ion-button block (click)="filter()">Filter</button>
+</ion-content>

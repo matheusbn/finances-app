@@ -14,3 +14,23 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.divider {
+  height: 150px;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+.icon-md {
+  font-size: 1.2em;
+}
+.shadow-bottom {
+  box-shadow: 0 1px 1px -1px #222;
+}
+.font-lg {
+  font-size: 45px;
+}
+

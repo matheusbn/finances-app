@@ -19,22 +19,20 @@ export class AddCashflowPage {
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public formBuilder: FormBuilder) {
 		this.cashflowType = this.navParams.get('cashflowType')
-		this.cashflowSources = this.getEnumNames(this.cashflowType ? IncomeSources : ExpenseSources)
+    this.cashflowSources = this.getEnumNames(this.cashflowType ? IncomeSources : ExpenseSources)
 		this.form = formBuilder.group({
 			date: ['', Validators.required],
 			amount: ['', Validators.compose([Validators.pattern('[0-9]*'), Validators.required])],
-			type: ['', Validators.required]
+			source: ['', Validators.required]
 		})
-		
 		this.currentDate = new Date().toISOString()
 	}
 
 	add() {
 		if (this.form.valid) {
 			this.form.value.amount = Number( (this.cashflowType ? "" : "-") + this.form.value.amount)
-			this.form.value.date = new Date(this.form.value.date)
+      this.form.value.date = new Date(this.form.value.date)
 			this.viewCtrl.dismiss(this.form.value)
-
 		}
 		else {
 			this.submitFailed = true

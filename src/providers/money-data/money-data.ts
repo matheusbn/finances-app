@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Cashflow } from '../../model/cashflow';
 import { DatabaseProvider } from '../../providers/database/database';
 
+
 @Injectable()
 export class MoneyDataProvider {
 	private _totalMoney: number = 0
@@ -20,14 +21,15 @@ export class MoneyDataProvider {
 
 	loadCashflows() {
 		return this.database.getCashflows()
-			.then(cashflows => {
-				this.cashflows = cashflows
-			})
+			.then(cashflows => this.cashflows = cashflows)
 	}
 
 	addCashflow(cashflow: Cashflow) {
-		this.cashflows.push(cashflow)
-		this.database.insertCashflow(cashflow)
+    const index = this.addByDate(this.cashflows, cashflow)
+    this.database.insertCashflow(cashflow).then(data => {
+      cashflow.id = data.insertId
+      if(index !== 0) this.updateResultingMoney(cashflow, index)
+    })
 		this.totalMoney += cashflow.amount
 	}
 	
@@ -41,5 +43,45 @@ export class MoneyDataProvider {
 
 	get cashflows(): Cashflow[] {
 		return this._cashflows
-	}
+  }
+
+  private updateResultingMoney(cashflow: Cashflow, index: number) {
+    if(index === this.cashflows.length-1) cashflow.resultingMoney = cashflow.amount
+    else cashflow.resultingMoney = this.cashflows[index + 1].resultingMoney + cashflow.amount
+    this.database.updateCashflowResultingMoney(cashflow).then(() => this.database.selectTable('cashflows'))
+    this.cashflows.forEach((cf, i) => {
+      if(i >= index) return
+      this.cashflows[i].resultingMoney += cashflow.amount
+      this.database.updateCashflowResultingMoney(this.cashflows[i])
+    })
+  }
+
+  private addByDate(cashflows: Cashflow[], cashflow: Cashflow): number {
+    let min: number = 0
+    let max: number = cashflows.length - 1
+    let index: number
+
+    if (cashflows.length === 0 || cashflows[0].date.valueOf() < cashflow.date.valueOf()) {
+      cashflows.unshift(cashflow)
+      return 0
+    }
+    if (cashflows[max].date.valueOf() > cashflow.date.valueOf()) {
+      cashflows.push(cashflow)
+      return max + 1
+    }
+
+    while (min <= max) {
+      index = Math.floor((min + max) / 2)
+
+      if (cashflows[index].date.valueOf() <= cashflow.date.valueOf() 
+        && cashflows[index + 1].date.valueOf() >= cashflow.date.valueOf()) {
+        cashflows.splice(index + 1, 0, cashflow)
+        return index + 1
+      }
+      if (cashflows[index].date.valueOf() > cashflow.date.valueOf()) min = index + 1
+      else if (cashflows[index].date.valueOf() < cashflow.date.valueOf()) max = index - 1
+    }
+
+    return -1
+  }
 }

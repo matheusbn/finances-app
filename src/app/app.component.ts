@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { TranslateService } from 'ng2-translate';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -29,4 +30,3 @@ export class MyApp {
     this.nav.push(pageLink)
   }
 }
-

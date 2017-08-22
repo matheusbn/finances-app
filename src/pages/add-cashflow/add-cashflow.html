@@ -1,36 +1,38 @@
 <ion-header>
 
-    <ion-navbar color="primary">
-        <ion-title *ngIf="cashflowType">{{"pages.add-cashflow.income.title" | translate}}</ion-title>
-        <ion-title *ngIf="!cashflowType">{{"pages.add-cashflow.expense.title" | translate}}</ion-title>
-    </ion-navbar>
+  <ion-navbar color="primary">
+    <ion-title *ngIf="cashflowType">{{"pages.add-cashflow.income.title" | translate}}</ion-title>
+    <ion-title *ngIf="!cashflowType">{{"pages.add-cashflow.expense.title" | translate}}</ion-title>
+  </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-    <form [formGroup]="form">
-		<p class="error-message" text-center *ngIf="!form.valid && submitFailed">Please fill out all fields accurately.</p>
-        <ion-item>
-            <ion-label>Date</ion-label>
-			<ion-datetime formControlName="date" [(ngModel)]="currentDate" displayFormat="DD/MM/YYYY"></ion-datetime>
-        </ion-item>
+  <form [formGroup]="form">
+    <p class="error-message" text-center *ngIf="!form.valid && submitFailed">Please fill out all fields accurately.</p>
+    <ion-item>
+      <ion-label>Date</ion-label>
+      <ion-datetime formControlName="date" [(ngModel)]="currentDate" displayFormat="DD/MM/YYYY"></ion-datetime>
+    </ion-item>
 
-        <ion-item>
-            <ion-label>Amount</ion-label>
-            <ion-input formControlName="amount" type="tel" text-right></ion-input>
-        </ion-item>
-		<p class="error-message" text-right *ngIf="!form.controls.amount.valid && (form.controls.amount.dirty || submitFailed)">
-			Please enter a valid number.
-		</p>
+    <ion-item>
+      <ion-label>Amount</ion-label>
+      <ion-input formControlName="amount" type="number" text-right></ion-input>
+    </ion-item>
+    <p class="error-message" text-right *ngIf="!form.controls.amount.valid && (form.controls.amount.dirty || submitFailed)">
+      Please enter a valid number.
+    </p>
 
-        <ion-item>
-            <ion-label>Type</ion-label>
-            <ion-select formControlName="type" type="text">
-				<ion-option *ngFor="let source of cashflowSources">{{source}}</ion-option>
-			</ion-select>
-        </ion-item>
-    </form>
-	<br>
-    <button ion-button block (click)="add()">ADD</button>
+     <ion-item>
+      <ion-label>Source</ion-label>
+      <ion-select formControlName="source" type="text">
+         <ion-option *ngFor="let source of cashflowSources">{{source}}</ion-option> 
+      </ion-select>
+    </ion-item> 
+  </form>
+
+  <br>
+  <br>
+  <button ion-button block (click)="add()">ADD</button>
 </ion-content>

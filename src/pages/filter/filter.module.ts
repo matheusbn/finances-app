@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { HomePage } from './home';
+import { FilterPage } from './filter';
+
 import { TranslateModule } from 'ng2-translate/ng2-translate';
 
 @NgModule({
   declarations: [
-    HomePage,
+    FilterPage,
   ],
   imports: [
-    IonicPageModule.forChild(HomePage),
+    IonicPageModule.forChild(FilterPage),
 	  TranslateModule
   ],
   exports: [
-    HomePage
+    FilterPage
   ]
 })
-export class HomePageModule {}
+export class FilterPageModule {}

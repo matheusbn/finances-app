@@ -1,22 +1,33 @@
-page-home {
+  page-home {
 	.cashflow-card {
 		background-color: #f2f2f2;
 		padding-bottom: 8px;
-	}
-	.left {
-		float: left;
-	}
-	.right {
-		float: right;
-	}
-	.big-icon {
-		font-size: 18px;
-	}
+  }
 	#cashflow-buttons {
 		margin-top: 14px;
-		margin-right: 0;
-	}
+		margin-right: 6px;
+  }
 	#income-button {
 		margin-bottom: 8px;
-	}
+  }
+  #header-info {
+    padding: 0 5px 20px 10px;
+    color: color($colors, font-color);
+  }
+  #cashflow-list {
+    padding-top: 5px;
+  }
+
+  .item-md.item-block .item-inner {
+    padding-right: 0;
+  }
+
+  ion-label.label.label-md {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  ion-navbar {
+    box-shadow: 0 1px 2px #000;
+  }
 }
