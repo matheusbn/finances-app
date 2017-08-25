@@ -15,7 +15,8 @@ export class AddCashflowPage {
 	cashflowSources: string[]
 	submitFailed: boolean
 	cashflowType: boolean
-	currentDate: string
+  currentDate: string
+  cashflowSource: string = 'Other'
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public formBuilder: FormBuilder) {
 		this.cashflowType = this.navParams.get('cashflowType')

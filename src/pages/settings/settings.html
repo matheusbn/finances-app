@@ -12,12 +12,27 @@
 
 <ion-content padding>
 
-	<ion-item>
-		<ion-label>{{"pages.settings.language" | translate}}</ion-label>
-		<ion-select [(ngModel)]="language">
-			<ion-option selected="true" value="en">{{"pages.settings.options.en" | translate}}</ion-option>
-			<ion-option value="pt">{{"pages.settings.options.pt" | translate}}</ion-option>
-		</ion-select>
-	</ion-item>
+  <ion-list>
+    <ion-item>
+      <ion-label>{{"pages.settings.language" | translate}}</ion-label>
+      <ion-select [(ngModel)]="language">
+        <ion-option value="en">{{"pages.settings.options.en" | translate}}</ion-option>
+        <ion-option value="pt">{{"pages.settings.options.pt" | translate}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item-divider text-center class="item-divider">Wallets</ion-item-divider>
+
+    <ion-item (click)="addWallet()">
+      <ion-label color="primary">ADD WALLET</ion-label>
+    </ion-item>
+
+    <ion-item (click)="deleteWallet()">
+      <ion-label color="primary">DELETE WALLET</ion-label>
+    </ion-item>
+
+    <ion-item>
+    </ion-item>
+  </ion-list>
 
 </ion-content>

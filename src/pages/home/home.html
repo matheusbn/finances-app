@@ -14,7 +14,7 @@
       <ion-row  id="header-info" align-items-center class="shadow-bottom">
         <ion-col col-2>
 
-          <label>{{unit}}</label><label class="font-lg">{{totalMoney}}</label>
+          <label>{{unit}}</label><label class="font-lg">{{moneyData.totalMoney}}</label>
 
         </ion-col>
 
@@ -36,7 +36,11 @@
       </ion-row>
 
       <ion-row justify-content-end>
-        <ion-col col-10></ion-col>
+        <ion-col col-5>
+          <button ion-button clear (click)="changeWallet()">CHANGE WALLET</button>
+        </ion-col>
+
+        <ion-col col-5></ion-col>
 
         <ion-col col-1>
           <button class="right icon-md" ion-button clear (click)="filter()">

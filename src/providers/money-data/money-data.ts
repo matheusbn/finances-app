@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Cashflow } from '../../model/cashflow';
+import { Wallet } from '../../model/wallet';
 import { DatabaseProvider } from '../../providers/database/database';
 
 
 @Injectable()
 export class MoneyDataProvider {
 	private _totalMoney: number = 0
-	private _cashflows: Cashflow[] = []
+  private _cashflows: Cashflow[] = []
+  private _currentWalletId: number
+  wallets: Wallet[]
 	unit: string = "R$ "
 
-	constructor(private database: DatabaseProvider) {}
+	constructor(private database: DatabaseProvider) {
+  }
 
 	get totalMoney(): number {
 		return this._totalMoney
@@ -17,20 +21,42 @@ export class MoneyDataProvider {
 
 	set totalMoney(totalMoney: number) {
 		this._totalMoney = Number(totalMoney)
-	}
+  }
+  
+  get currentWalletId(): number {
+    return this._currentWalletId
+  }
 
-	loadCashflows() {
-		return this.database.getCashflows()
-			.then(cashflows => this.cashflows = cashflows)
-	}
+  set currentWalletId(currentWalletId: number) {
+    this._currentWalletId = Number(currentWalletId)
+    this.database.activateWallet(this.currentWalletId)
+  }
+
+  async load() {
+    this.loadWallets()
+    this.currentWalletId = await this.database.getCurrentWalletId()
+    await this.loadCashflows()
+  }
+
+	async loadWallets() {
+    this.wallets = await this.database.getWallets()
+  }
+
+  async loadCashflows() {
+    console.log(this.currentWalletId)
+    this.cashflows = await this.database.getCashflows(this.currentWalletId)
+    console.log(this.cashflows)
+  }
+  
 
 	addCashflow(cashflow: Cashflow) {
+    this.totalMoney += cashflow.amount
+    cashflow.resultingMoney = this.totalMoney
     const index = this.addByDate(this.cashflows, cashflow)
-    this.database.insertCashflow(cashflow).then(data => {
+    this.database.insertCashflow(cashflow, this.currentWalletId).then(data => {
       cashflow.id = data.insertId
       if(index !== 0) this.updateResultingMoney(cashflow, index)
     })
-		this.totalMoney += cashflow.amount
 	}
 	
 	set cashflows(cashflows: Cashflow[]) {
@@ -48,7 +74,7 @@ export class MoneyDataProvider {
   private updateResultingMoney(cashflow: Cashflow, index: number) {
     if(index === this.cashflows.length-1) cashflow.resultingMoney = cashflow.amount
     else cashflow.resultingMoney = this.cashflows[index + 1].resultingMoney + cashflow.amount
-    this.database.updateCashflowResultingMoney(cashflow).then(() => this.database.selectTable('cashflows'))
+    this.database.updateCashflowResultingMoney(cashflow).then(() => this.database.selectTable('cashflow'))
     this.cashflows.forEach((cf, i) => {
       if(i >= index) return
       this.cashflows[i].resultingMoney += cashflow.amount

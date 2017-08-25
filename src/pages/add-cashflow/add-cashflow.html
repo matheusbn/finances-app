@@ -26,7 +26,7 @@
 
      <ion-item>
       <ion-label>Source</ion-label>
-      <ion-select formControlName="source" type="text">
+      <ion-select formControlName="source" type="text" [(ngModel)]="cashflowSource">
          <ion-option *ngFor="let source of cashflowSources">{{source}}</ion-option> 
       </ion-select>
     </ion-item> 

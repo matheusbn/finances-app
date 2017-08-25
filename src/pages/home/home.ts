@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, IonicPage } from 'ionic-angular';
+import { NavController, ModalController, IonicPage, AlertController } from 'ionic-angular';
 
 import { Cashflow } from '../../model/cashflow';
 
@@ -13,7 +13,6 @@ import { DatabaseProvider } from '../../providers/database/database';
 	templateUrl: 'home.html'
 })
 export class HomePage {
-	totalMoney: number
   cashflows: Cashflow[]
 	unit: string
   dateFormat: string
@@ -28,18 +27,17 @@ export class HomePage {
     year:'numeric'
   }
 
-	constructor(public navCtrl: NavController, public modalCtrl: ModalController,
-		public moneyData: MoneyDataProvider, public database: DatabaseProvider) {
+	constructor(public navCtrl: NavController, public modalCtrl: ModalController, public moneyData: MoneyDataProvider,
+    public database: DatabaseProvider, public alertCtrl: AlertController) {
 		if (!this.cashflows) {
-			this.totalMoney = 0
 			this.unit = this.moneyData.unit
 			this.dateFormat = 'pt-BR'
 
 			database.initialize().then(() => {
-				this.moneyData.loadCashflows()
-					.then(() => {
-						this.cashflows = this.moneyData.cashflows
-            this.totalMoney = this.moneyData.totalMoney
+				this.moneyData.load().then(() => {
+            this.cashflows = this.moneyData.cashflows
+            console.log(this.moneyData.cashflows)
+            console.log(this.cashflows)
 					})
 			})
 
@@ -47,49 +45,81 @@ export class HomePage {
 		}
   }
 
+  ionViewWillEnter() {
+    this.cashflows = this.moneyData.cashflows
+  }
+
 	// The parameter cashflowType is used to determine wheter to add an income (true) or an expense (false).
 	addCashflow(cashflowType: boolean) {
 		const modal = this.modalCtrl.create('AddCashflowPage', { cashflowType: cashflowType })
 		modal.onDidDismiss(data => {
-			if (data) {
-				this.totalMoney += data.amount
-				data.resultingMoney = this.totalMoney
-				this.moneyData.addCashflow(data)
-			}
+			if (!data) return
+      this.moneyData.addCashflow(data)
+      data.resultingMoney = this.moneyData.totalMoney
 		})
 		modal.present()
   }
   
+  changeWallet() {
+    this.database.selectTable('cashflow')
+    console.log(this.cashflows)
+    const alert = this.alertCtrl.create({
+      title: 'Change Wallet',
+      inputs: this.moneyData.wallets.map(wallet => {
+        return {
+          type: 'radio',
+          label: wallet.name,
+          value: wallet.id.toString(),
+          checked: wallet.id === this.moneyData.currentWalletId
+        }
+      }),
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'OK',
+          handler: async walletId => {
+            this.moneyData.currentWalletId = walletId
+            await this.moneyData.loadCashflows()
+            this.cashflows = this.moneyData.cashflows
+          }
+        }
+      ]
+    })
+    alert.present()
+  }
+
   filter() {
     const modal = this.modalCtrl.create('FilterPage')
     modal.onDidDismiss(data => {
-      if(data) {
-        if((data.isIncome && data.isExpense) || (!data.isIncome && !data.isExpense)) {
-          this.cashflows = this.moneyData.cashflows
-        }
-        else {
-          this.cashflows = this.moneyData.cashflows.filter(cf => {
-            if(data.isIncome) return cf.amount >= 0
+      if(!data) return
+      if((data.isIncome && data.isExpense) || (!data.isIncome && !data.isExpense)) {
+        this.cashflows = this.moneyData.cashflows
+      }
+      else {
+        this.cashflows = this.moneyData.cashflows.filter(cf => {
+          if(data.isIncome) return cf.amount >= 0
 
-            else return cf.amount < 0
-          })
-        }
+          else return cf.amount < 0
+        })
+      }
 
-        if(data.filterBy == 0) {
-          if(data.fromValue != null) this.cashflows = this.cashflows.filter(cf => cf.amount >= data.fromValue)
-          if(data.toValue != null) this.cashflows = this.cashflows.filter(cf => cf.amount <= data.toValue)
-        }
-        else if(data.filterBy == 1) {
-          this.cashflows = this.cashflows.filter(cf => cf.date.getMonth() == data.month)
-        }
-        else if(data.filterBy == 2) {
-          console.log(new Date(data.fromDate), new Date(data.toDate))
-          if(data.fromDate != null) this.cashflows = this.cashflows.filter(cf => cf.date >= new Date(data.fromDate))
-          if(data.toDate != null) this.cashflows = this.cashflows.filter(cf => cf.date <= new Date(data.toDate))
-        }
-        else if(data.filterBy == 3) {
-           this.cashflows = this.cashflows.filter(cf => cf.source === data.source)
-        }
+      if(data.filterBy == 0) {
+        if(data.fromValue != null) this.cashflows = this.cashflows.filter(cf => cf.amount >= data.fromValue)
+        if(data.toValue != null) this.cashflows = this.cashflows.filter(cf => cf.amount <= data.toValue)
+      }
+      else if(data.filterBy == 1) {
+        this.cashflows = this.cashflows.filter(cf => cf.date.getMonth() == data.month)
+      }
+      else if(data.filterBy == 2) {
+        console.log(new Date(data.fromDate), new Date(data.toDate))
+        if(data.fromDate != null) this.cashflows = this.cashflows.filter(cf => cf.date >= new Date(data.fromDate))
+        if(data.toDate != null) this.cashflows = this.cashflows.filter(cf => cf.date <= new Date(data.toDate))
+      }
+      else if(data.filterBy == 3) {
+          this.cashflows = this.cashflows.filter(cf => cf.source === data.source)
       }
     })
     modal.present()
