@@ -36,8 +36,6 @@ export class HomePage {
 			database.initialize().then(() => {
 				this.moneyData.load().then(() => {
             this.cashflows = this.moneyData.cashflows
-            console.log(this.moneyData.cashflows)
-            console.log(this.cashflows)
 					})
 			})
 
@@ -61,8 +59,6 @@ export class HomePage {
   }
   
   changeWallet() {
-    this.database.selectTable('cashflow')
-    console.log(this.cashflows)
     const alert = this.alertCtrl.create({
       title: 'Change Wallet',
       inputs: this.moneyData.wallets.map(wallet => {
@@ -114,7 +110,6 @@ export class HomePage {
         this.cashflows = this.cashflows.filter(cf => cf.date.getMonth() == data.month)
       }
       else if(data.filterBy == 2) {
-        console.log(new Date(data.fromDate), new Date(data.toDate))
         if(data.fromDate != null) this.cashflows = this.cashflows.filter(cf => cf.date >= new Date(data.fromDate))
         if(data.toDate != null) this.cashflows = this.cashflows.filter(cf => cf.date <= new Date(data.toDate))
       }

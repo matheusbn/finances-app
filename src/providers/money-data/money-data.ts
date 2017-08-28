@@ -43,9 +43,7 @@ export class MoneyDataProvider {
   }
 
   async loadCashflows() {
-    console.log(this.currentWalletId)
     this.cashflows = await this.database.getCashflows(this.currentWalletId)
-    console.log(this.cashflows)
   }
   
 
@@ -74,7 +72,7 @@ export class MoneyDataProvider {
   private updateResultingMoney(cashflow: Cashflow, index: number) {
     if(index === this.cashflows.length-1) cashflow.resultingMoney = cashflow.amount
     else cashflow.resultingMoney = this.cashflows[index + 1].resultingMoney + cashflow.amount
-    this.database.updateCashflowResultingMoney(cashflow).then(() => this.database.selectTable('cashflow'))
+    this.database.updateCashflowResultingMoney(cashflow)
     this.cashflows.forEach((cf, i) => {
       if(i >= index) return
       this.cashflows[i].resultingMoney += cashflow.amount

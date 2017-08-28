@@ -30,7 +30,7 @@ export class DatabaseProvider {
       amount INT NOT NULL,
       source TEXT NOT NULL,
       resultingMoney INT NOT NULL,
-      FOREGIN KEY walletId REFERENCES wallet (id) ON DELETE CASCADE);`, null)
+      FOREIGN KEY(walletId) REFERENCES wallet(id) ON DELETE CASCADE);`, null)
       .catch(console.error)
 
     this.database.executeSql(`CREATE TABLE IF NOT EXISTS etc (

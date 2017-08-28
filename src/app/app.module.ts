@@ -4,6 +4,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SQLite } from '@ionic-native/sqlite';
+import { SocialSharing } from '@ionic-native/social-sharing';
+import { File } from '@ionic-native/file';
 import { Http } from '@angular/http';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate/ng2-translate';
 
@@ -35,7 +37,9 @@ export function createTranslateLoader(http: Http) {
   providers: [
     StatusBar,
     SplashScreen,
-	SQLite,
+    SQLite,
+    SocialSharing,
+    File,
     {provide: ErrorHandler, useClass: IonicErrorHandler}, MoneyDataProvider, DatabaseProvider
   ]
 })
