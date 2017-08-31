@@ -54,7 +54,7 @@
         "@angular/tsc-wrapped": "^4.3.3",
         "@ionic/app-scripts": "^2.1.4",
         "@ionic/cli-utils": "1.6.0",
-        "ionic": "3.9.2",
+        "ionic": "3.9.1",
         "typescript": "2.3.4"
     },
     "version": "0.0.1",
