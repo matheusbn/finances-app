@@ -124,7 +124,7 @@ export class DatabaseProvider {
     const values = [
       walletId
     ]
-    await this.database.executeSql(`UPDATE etc SET activeWalletId = ? WHERE id = 1;`, values)
+    return this.database.executeSql(`UPDATE etc SET activeWalletId = ? WHERE id = 1;`, values)
       .catch(console.error)
   }
 
@@ -133,6 +133,31 @@ export class DatabaseProvider {
       .catch(console.error)
     return data.rows.item(0).activeWalletId
   }
+
+
+  async loadFromData(wallets) {
+    try {
+      await this.database.executeSql('BEGIN TRANSACTION;', null)
+      await this.database.executeSql('DELETE FROM wallet;', null)
+      await this.database.executeSql('DELETE FROM cashflow;', null)
+      let firstWalletId: number
+      let i = 0
+      for(const wallet of wallets) {
+        const data = await this.insertWallet(wallet)
+        const walletId = data.insertId
+        if (i++ === 0) {
+          firstWalletId = walletId
+        }
+        for(const cashflow of wallet.cashflows) await this.insertCashflow(cashflow, walletId)
+      }
+      await this.activateWallet(firstWalletId)
+      await this.database.executeSql('COMMIT;', null)
+    } catch (error) {
+      console.error(error)
+      this.database.executeSql('ROLLBACK;', null).catch(console.error)
+    } 
+  }
+
   // Utility functions
 
 	selectTable(table: String): Promise<any> {

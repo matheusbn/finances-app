@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, AlertController, ToastController, 
 import { TranslateService } from 'ng2-translate';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { File } from '@ionic-native/file';
+import { FileChooser } from '@ionic-native/file-chooser';
+import { FilePath } from '@ionic-native/file-path';
 import { DatabaseProvider } from '../../providers/database/database';
 import { MoneyDataProvider } from '../../providers/money-data/money-data';
 import { Wallet } from '../../model/wallet';
@@ -21,7 +23,7 @@ export class SettingsPage {
 	constructor(public navCtrl: NavController, public navParams: NavParams, public translateService: TranslateService,
     public database: DatabaseProvider, public alertCtrl: AlertController, public toastCtrl: ToastController, 
     public loadingCtrl: LoadingController, public moneyData: MoneyDataProvider, private socialSharing: SocialSharing,
-    private file: File) {
+    private file: File, private fileChooser: FileChooser, private filePath: FilePath) {
 	}
 
 
@@ -30,7 +32,7 @@ export class SettingsPage {
 	}
 
   addWallet() {
-    const alert = this.alertCtrl.create({
+    const alertOptions: any = {
       title: 'New Wallet',
       subTitle: 'Enter the name for the new wallet',
       inputs: [
@@ -41,11 +43,11 @@ export class SettingsPage {
       buttons: [
         {
           text: 'Cancel',
-          role: 'cancel',          
+          role: 'cancel'      
         },
         {
           text: 'Confirm',
-          handler: async walletData => {
+          handler: async (walletData) => {
             if(walletData.name) {
               const wallet = new Wallet(walletData.name)
               const data = await this.database.insertWallet(wallet)
@@ -56,12 +58,13 @@ export class SettingsPage {
           }
         }
       ]
-    })
+    }
+    const alert = this.alertCtrl.create(alertOptions)
     alert.present()
   }
 
   deleteWallet() {
-    const alert = this.alertCtrl.create({
+    const alertOptions: any = {
       title: 'Delete Wallet',
       inputs: this.moneyData.wallets.map(wallet => {
         return {
@@ -104,7 +107,8 @@ export class SettingsPage {
           }
         }
       ]
-    })
+    }
+    const alert = this.alertCtrl.create(alertOptions)
     alert.present()
   }
 
@@ -132,6 +136,37 @@ export class SettingsPage {
     this.file.removeFile(this.file.dataDirectory, this.fileName).catch(console.error)
   }
 
+  async importData() {
+    const uri: any = await this.fileChooser.open().catch(console.error)
+    const filePath: any = await this.filePath.resolveNativePath(uri).catch(console.error)
+
+    const lastSlash = filePath.lastIndexOf('/') + 1
+    const dirPath: string = filePath.substr(0, lastSlash)
+    const fileName: string = filePath.substr(lastSlash, filePath.length)
+
+    const fileNameArray: string[] = fileName.split('.')
+    const formatIndex: number = fileNameArray.length - 1
+    if(fileNameArray[formatIndex] !== 'json') {
+      const errorAlert = this.alertCtrl.create({
+        title: "Wrong File",
+        subTitle: `The file must be of "JSON" format. It'll probably be called "${this.fileName}".`,
+        buttons: [
+          {
+            text: 'OK'
+          }
+        ]
+      })
+      errorAlert.present()
+      return
+    }
+
+    const jsonData: string = await this.file.readAsText(dirPath, fileName)
+    const data = JSON.parse(jsonData)
+    await this.database.loadFromData(data)
+    await this.moneyData.load()
+    this.presentToast("Data imported successfully")
+  }
+
   presentToast(message: string) {
     const toast = this.toastCtrl.create({
       message: message,
@@ -140,6 +175,6 @@ export class SettingsPage {
     })
 
     toast.present()
-}
+  }
 
 }

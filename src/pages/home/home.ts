@@ -59,7 +59,7 @@ export class HomePage {
   }
   
   changeWallet() {
-    const alert = this.alertCtrl.create({
+    const alertOptions: any = {
       title: 'Change Wallet',
       inputs: this.moneyData.wallets.map(wallet => {
         return {
@@ -83,7 +83,8 @@ export class HomePage {
           }
         }
       ]
-    })
+    }
+    const alert = this.alertCtrl.create(alertOptions)
     alert.present()
   }
 
