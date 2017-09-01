@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="matheus.dev.finances-app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Finances</name>
-    <description>Finances-Dev</description>
+    <name>Finances-Dev</name>
+    <description>App to manage personal finances.</description>
     <author email="matheusbnedel@gmail.com">Matheus Berkenbrock Nedel</author>
     <content src="index.html" />
     <access origin="*" />
